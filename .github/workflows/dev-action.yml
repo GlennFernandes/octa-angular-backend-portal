@@ -55,7 +55,7 @@ jobs:
 
       - name: Check for deploy
         run: |
-          printenv
+          echo "${{ env.should_deploy }}"
 
       # - name: Deploy to Firebase
       #   uses: w9jds/firebase-action@v2.2.2
