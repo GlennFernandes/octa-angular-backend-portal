@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: |
-          yarn install
+          npm ci
 
       - name: Build
         uses: mansagroup/nrwl-nx-action@v2
