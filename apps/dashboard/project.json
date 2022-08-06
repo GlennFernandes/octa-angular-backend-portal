@@ -79,6 +79,29 @@
         "jestConfig": "apps/dashboard/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "deploy:develop": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm install -g firebase-tools",
+          "firebase deploy -P default --only hosting:develop"
+        ],
+        "cwd": "apps/dashboard",
+        "parallel": false
+      }
+    },
+    "deploy:prod": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "cp robots.txt dist/robots.txt",
+          "npm install -g firebase-tools",
+          "firebase deploy -P prod --only hosting:prod"
+        ],
+        "cwd": "apps/dashboard",
+        "parallel": false
+      }
     }
   },
   "tags": []
