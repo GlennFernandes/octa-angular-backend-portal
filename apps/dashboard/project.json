@@ -85,7 +85,7 @@
       "options": {
         "commands": [
           "cp robots.txt dist/robots.txt",
-          "export SHOULD_DEPLOY=true"
+          "echo SHOULD_DEPLOY=true >> $GITHUB_ENV"
         ],
         "cwd": "apps/dashboard",
         "parallel": false
