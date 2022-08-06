@@ -23,8 +23,6 @@ jobs:
         with:
           targets: build
           projects: dashboard
-        run: |
-          ls -l
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@v2.2.2
         with:
