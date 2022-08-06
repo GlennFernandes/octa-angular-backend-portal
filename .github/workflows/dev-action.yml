@@ -1,0 +1,34 @@
+name: Deployment_Development
+
+on:
+  push:
+    branches:
+      - 'features/nx'
+  # pull_request:
+  #   branches:
+  #     - "develop"
+  #   types: [closed]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.ref }}
+      - name: Build
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: build
+          projects: dashboard
+        run: |
+          ls -l
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@v2.2.2
+        with:
+          args: deploy -P default --only hosting:develop
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_PATH: ./apps/dashboard
