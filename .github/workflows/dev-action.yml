@@ -6,7 +6,7 @@ on:
       - 'features/nx'
   # pull_request:
   #   branches:
-  #     - "develop"
+  #     - 'develop-nx'
   #   types: [closed]
 
 jobs:
@@ -19,29 +19,34 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache yarn dependencies
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: |
           yarn install
-          ls -l
 
       - name: Build
         uses: mansagroup/nrwl-nx-action@v2
         with:
-          targets: build
+          targets: build,deploy:develop
           projects: dashboard
 
-      - name: Directory Listing
-        run: |
-          yarn install
-          ls -l
-          cd apps/dashboard
-          ls -l
-          cp robots.txt dist/robots.txt
-
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v2.2.2
-        with:
-          args: deploy -P default --only hosting:develop
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_PATH: ./apps/dashboard
+      # - name: Deploy to Firebase
+      #   uses: w9jds/firebase-action@v2.2.2
+      #   with:
+      #     args: deploy -P default --only hosting:develop
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      #     PROJECT_PATH: ./apps/dashboard
