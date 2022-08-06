@@ -22,6 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
+          ls -l
 
       - name: Build
         uses: mansagroup/nrwl-nx-action@v2
@@ -29,10 +30,15 @@ jobs:
           targets: build
           projects: dashboard
 
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v2.2.2
-        with:
-          args: deploy -P default --only hosting:develop
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          PROJECT_PATH: ./apps/dashboard
+      - name: Directory Listing
+        run: |
+          yarn install
+          ls -l
+
+      # - name: Deploy to Firebase
+      #   uses: w9jds/firebase-action@v2.2.2
+      #   with:
+      #     args: deploy -P default --only hosting:develop
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      #     PROJECT_PATH: ./apps/dashboard
