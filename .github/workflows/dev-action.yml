@@ -25,10 +25,10 @@ jobs:
       #     npm install -g firebase-tools
       #     firebase login
 
-      # - name: Checkout Repo
-      #   uses: actions/checkout@master
-      #   with:
-      #     ref: ${{ github.ref }}
+      - name: Checkout Repo
+        uses: actions/checkout@master
+        with:
+          ref: ${{ github.ref }}
 
       # - name: Get npm cache directory
       #   id: npm-cache-dir
