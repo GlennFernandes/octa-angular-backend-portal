@@ -14,36 +14,36 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-      - shell: bash
-        env:
-          SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-        run: |
-          echo $SERVICE_ACCOUNT_KEY
-          echo $SERVICE_ACCOUNT_KEY | base64 --decode > service.json
-          export GOOGLE_APPLICATION_CREDENTIALS=./service.json
-          echo $GOOGLE_APPLICATION_CREDENTIALS
-          npm install -g firebase-tools
-          firebase login
+      # - shell: bash
+      #   env:
+      #     SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+      #   run: |
+      #     echo $SERVICE_ACCOUNT_KEY
+      #     echo $SERVICE_ACCOUNT_KEY | base64 --decode > service.json
+      #     export GOOGLE_APPLICATION_CREDENTIALS=./service.json
+      #     echo $GOOGLE_APPLICATION_CREDENTIALS
+      #     npm install -g firebase-tools
+      #     firebase login
 
-      - name: Checkout Repo
-        uses: actions/checkout@master
-        with:
-          ref: ${{ github.ref }}
+      # - name: Checkout Repo
+      #   uses: actions/checkout@master
+      #   with:
+      #     ref: ${{ github.ref }}
 
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-      - uses: actions/cache@v3
-        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Get npm cache directory
+      #   id: npm-cache-dir
+      #   run: |
+      #     echo "::set-output name=dir::$(npm config get cache)"
+      # - uses: actions/cache@v3
+      #   id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+      #   with:
+      #     path: ${{ steps.npm-cache-dir.outputs.dir }}
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
       - name: Install dependencies
-        if: steps.npm-cache.outputs.cache-hit != 'true'
+        # if: steps.npm-cache.outputs.cache-hit != 'true'
         run: |
           npm ci
 
@@ -52,6 +52,10 @@ jobs:
         with:
           targets: build,deploy:develop
           projects: dashboard
+
+      - name: Check for deploy
+        run: |
+          printenv
 
       # - name: Deploy to Firebase
       #   uses: w9jds/firebase-action@v2.2.2

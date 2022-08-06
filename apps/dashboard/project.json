@@ -96,8 +96,7 @@
       "options": {
         "commands": [
           "cp robots.txt dist/robots.txt",
-          "npm install -g firebase-tools",
-          "firebase deploy -P prod --only hosting:prod"
+          "export SHOULD_DEPLOY=true"
         ],
         "cwd": "apps/dashboard",
         "parallel": false
