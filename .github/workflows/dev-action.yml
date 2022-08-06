@@ -1,16 +1,17 @@
 name: Deployment_Development
 
 on:
-  push:
-    branches:
-      - 'features/nx'
-  # pull_request:
+  # push:
   #   branches:
-  #     - 'develop-nx'
-  #   types: [closed]
+  #     - 'features/nx'
+  pull_request:
+    branches:
+      - 'develop-nx'
+    types: [closed]
 
 jobs:
   deploy:
+    if: github.event.pull_request.merged == true
     name: Deploy
     runs-on: ubuntu-latest
     steps:
